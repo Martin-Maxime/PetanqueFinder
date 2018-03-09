@@ -1,2 +1,2 @@
-/node-rest-auth/node_modules
-/spa/node_modules
+/server/node_modules
+/client/node_modules
