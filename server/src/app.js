@@ -1,3 +1,4 @@
+var express = require('express');
 var morgan = require('morgan');
 var mongoose = require('mongoose');
 var passport = require('passport');
@@ -8,16 +9,20 @@ mongoose.connect(config.database);
 
 var api = require('../routes/api.js');
 
-api.use(function(req, res, next) {
+var app = express();
+
+app.use(function(req, res, next) {
   res.header("Access-Control-Allow-Origin", "*");
   res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
   next();
 });
 
-api.use(passport.initialize());
+app.use(passport.initialize());
 
-api.get('/', function(req, res) {
+app.get('/', function(req, res) {
   res.send('Page under construction.');
 });
 
-api.use('/api', api);
+app.use('/api', api);
+
+module.exports = app;
