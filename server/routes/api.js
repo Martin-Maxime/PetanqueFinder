@@ -52,6 +52,15 @@ router.post('/signin', function(req, res) {
   });
 });
 
+router.get('/users', function(req, res) {
+  User.find({}, 'username', function (error, users) {
+    if (error) { console.error(error); }
+    res.send({
+      users: users
+    })
+  }).sort({_id:-1})
+})
+
 getToken = function (headers) {
   if (headers && headers.authorization) {
     var parted = headers.authorization.split(' ');
