@@ -11,7 +11,16 @@ var UserSchema = new Schema({
   password: {
         type: String,
         required: true
-    }
+    },
+  email: {
+        type: String,
+        unique: true,
+        required: true
+  },
+  created_on: {
+    type: Date,
+    default: Date.now
+  }
 });
 
 UserSchema.pre('save', function (next) {
