@@ -6,7 +6,7 @@
       </div>
     </div>
     <div class="row">
-      <form class="col-md-12" @submit.prevent="validateBeforeSubmit" v-if="!formSubmitted">
+      <form class="col-md-12" @submit.prevent="addUser">
          <div class="row">
              <div class="col-md-12 form-group">
                  <label class="label">Email</label>
@@ -51,7 +51,7 @@
             <div class="col-md-12 form-group">
                <label class="label">Date de naissance</label>
                   <p class="">
-                     <input :value="birthday" name="birthday" v-validate.initial="'required|date_format:{MM/DD/YYYY}'" :class="{'input form-control': true, 'is-danger': errors.has('birthday') }" type="date">
+                     <input :value="birthday" name="birthday" v-validate.initial="'required'" :class="{'input form-control': true, 'is-danger': errors.has('birthday') }" type="date">
                      <i v-show="errors.has('birthday')" class="fa fa-warning"></i>
                      <span v-show="errors.has('birthday')" class="help is-danger">{{ errors.first('birthday') }}</span>
                   </p>
@@ -71,7 +71,7 @@
             <div class="col-md-12 form-group">
                <label class="label">Code postal</label>
                   <p class="">
-                     <input :value="postcode" name="postcode" v-validate.initial="'required|numeric'" :class="{'input form-control': true, 'is-danger': errors.has('postcode') }" type="text" placeholder="Adresse">
+                     <input :value="postcode" name="postcode" v-validate.initial="'required|numeric'" :class="{'input form-control': true, 'is-danger': errors.has('postcode') }" type="text" placeholder="Code postal">
                      <i v-show="errors.has('postcode')" class="fa fa-warning"></i>
                      <span v-show="errors.has('postcode')" class="help is-danger">{{ errors.first('postcode') }}</span>
                   </p>
@@ -91,24 +91,18 @@
             <button class="btn btn-primary btn-block" type="submit">Submit</button>
          </div>
       </form>
-      <div v-else>
-        <h1 class="submitted">Form submitted successfully!</h1>
-      </div>
     </div>
   </div>
 </template>
 
 <script>
-import Vue from 'vue'
+import Vue from 'vue';
+import axios from 'axios';
 import VeeValidate from 'vee-validate';
 import { Validator } from 'vee-validate';
+import SignupService from '@/services/auth/SignupService'
 
 Vue.use(VeeValidate);
-
-VeeValidate.Validator.extend('passphrase', {
-    getMessage: field => 'Sorry dude, wrong pass phrase.',
-    validate: value => value.toUpperCase() == 'Demogorgon'.toUpperCase()
-});
 
 export default {
   name: 'Signup',
@@ -120,13 +114,24 @@ export default {
     birthday: '',
     address:'',
     postcode: '',
-    city:'',
-
+    city:''
   }),
-  computed: {
-    name() {
-      return `${this.first_name} ${this.last_name}`;
+  methods: {
+    async addUser() {
+      await SignupService.addUser({
+        email: this.email,
+        password: this.password,
+        first_name: this.first_name,
+        last_name: this.last_name,
+        birthday: this.birthday,
+        address: this.address,
+        postcode: this.postcode,
+        city: this.city
+      })
+      this.$router.push({ name: 'Signup' })
     }
   }
 };
+
+
 </script>

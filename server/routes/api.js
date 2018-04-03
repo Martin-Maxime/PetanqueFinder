@@ -16,9 +16,14 @@ router.post('/signup', function(req, res) {
   }
   else {
     var newUser = new User({
-      username: req.body.username,
-      password: req.body.password,
       email:    req.body.email,
+      password: req.body.password,
+      firstname: req.body.first_name,
+      lastname: req.body.last_name,
+      birthday: req.body.birthday,
+      address: req.body.address,
+      postcode: req.body.postcode,
+      city: req.body.city
     });
     // save the user
     newUser.save(function(err) {
