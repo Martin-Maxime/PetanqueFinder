@@ -29,6 +29,7 @@ export default {
     async getUsers () {
       const response = await UsersService.listUsers()
       this.users = response.data.users
+      console.log(this.users)
     }
   },
   mounted () {

@@ -51,7 +51,7 @@
             <div class="col-md-12 form-group">
                <label class="label">Date de naissance</label>
                   <p class="">
-                     <input :value="birthday" name="birthday" v-validate.initial="'required'" :class="{'input form-control': true, 'is-danger': errors.has('birthday') }" type="date">
+                     <input name="birthday" v-model="birthday" v-validate.initial="'required'" :class="{'input form-control': true, 'is-danger': errors.has('birthday') }" type="date">
                      <i v-show="errors.has('birthday')" class="fa fa-warning"></i>
                      <span v-show="errors.has('birthday')" class="help is-danger">{{ errors.first('birthday') }}</span>
                   </p>
@@ -61,7 +61,7 @@
             <div class="col-md-12 form-group">
                <label class="label">Adresse</label>
                   <p class="">
-                     <input :value="address" name="address" v-validate.initial="'required'" :class="{'input form-control': true, 'is-danger': errors.has('address') }" type="text" placeholder="Adresse">
+                     <input name="address" v-model="address" v-validate.initial="'required'" :class="{'input form-control': true, 'is-danger': errors.has('address') }" type="text" placeholder="Adresse">
                      <i v-show="errors.has('address')" class="fa fa-warning"></i>
                      <span v-show="errors.has('address')" class="help is-danger">{{ errors.first('address') }}</span>
                   </p>
@@ -71,7 +71,7 @@
             <div class="col-md-12 form-group">
                <label class="label">Code postal</label>
                   <p class="">
-                     <input :value="postcode" name="postcode" v-validate.initial="'required|numeric'" :class="{'input form-control': true, 'is-danger': errors.has('postcode') }" type="text" placeholder="Code postal">
+                     <input name="postcode" v-model="postcode" v-validate.initial="'required|numeric'" :class="{'input form-control': true, 'is-danger': errors.has('postcode') }" type="text" placeholder="Code postal">
                      <i v-show="errors.has('postcode')" class="fa fa-warning"></i>
                      <span v-show="errors.has('postcode')" class="help is-danger">{{ errors.first('postcode') }}</span>
                   </p>
@@ -81,7 +81,7 @@
             <div class="col-md-12 form-group">
                <label class="label">Ville</label>
                   <p class="">
-                     <input :value="city" name="ville" v-validate.initial="'required'" :class="{'input form-control': true, 'is-danger': errors.has('city') }" type="text" placeholder="Ville">
+                     <input name="city" v-model="city" v-validate.initial="'required'" :class="{'input form-control': true, 'is-danger': errors.has('city') }" type="text" placeholder="Ville">
                      <i v-show="errors.has('city')" class="fa fa-warning"></i>
                      <span v-show="errors.has('city')" class="help is-danger">{{ errors.first('city') }}</span>
                   </p>

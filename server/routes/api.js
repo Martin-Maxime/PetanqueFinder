@@ -29,7 +29,7 @@ router.post('/signup', function(req, res) {
     newUser.save(function(err) {
       if (err) {
         console.log(err);
-        return res.json({success: false, msg: 'Username or email already exists.'});
+        return res.json({success: false, msg: 'Email already exists.'});
       }
       res.json({success: true, msg: 'Successful created new user.'});
     });
@@ -63,7 +63,7 @@ router.post('/signin', function(req, res) {
 });
 
 router.get('/users', function(req, res) {
-  User.find({}, 'firstname', function (error, users) {
+  User.find({}, 'firstname lastname', function (error, users) {
     if (error) { console.error(error); }
     res.send({
       users: users
