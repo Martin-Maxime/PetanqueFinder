@@ -61,7 +61,7 @@
             <div class="col-md-12 form-group">
                <label class="label">Adresse</label>
                   <p class="">
-                     <input :value="address" name="address" v-validate.initial="'required|alpha_spaces'" :class="{'input form-control': true, 'is-danger': errors.has('address') }" type="text" placeholder="Adresse">
+                     <input :value="address" name="address" v-validate.initial="'required'" :class="{'input form-control': true, 'is-danger': errors.has('address') }" type="text" placeholder="Adresse">
                      <i v-show="errors.has('address')" class="fa fa-warning"></i>
                      <span v-show="errors.has('address')" class="help is-danger">{{ errors.first('address') }}</span>
                   </p>

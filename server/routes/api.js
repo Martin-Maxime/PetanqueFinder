@@ -9,7 +9,7 @@ var User = require("../models/users");
 
 
 router.post('/signup', function(req, res) {
-  if (!req.body.username || !req.body.password ) {
+  if (!req.body.email || !req.body.password ) {
     res.json({success: false, msg: 'Please pass username and password.'});
   } else if (!req.body.email) {
     res.json({succress: false, msg: 'Please pass email.'})
@@ -28,6 +28,7 @@ router.post('/signup', function(req, res) {
     // save the user
     newUser.save(function(err) {
       if (err) {
+        console.log(err);
         return res.json({success: false, msg: 'Username or email already exists.'});
       }
       res.json({success: true, msg: 'Successful created new user.'});
@@ -62,7 +63,7 @@ router.post('/signin', function(req, res) {
 });
 
 router.get('/users', function(req, res) {
-  User.find({}, 'username', function (error, users) {
+  User.find({}, 'firstname', function (error, users) {
     if (error) { console.error(error); }
     res.send({
       users: users

@@ -3,8 +3,9 @@
     <h1>Liste des utilisateurs</h1>
     <div v-if="users.length > 0" class="table-wrap">
       <table>
-        <tr v-for="user in users">
-          <td>{{ user.username }}</td>
+        <tr v-for="user in this.users">
+          <td>{{ user.firstname }}</td>
+          <td>{{ user.lastname }}</td>
         </tr>
       </table>
     </div>
