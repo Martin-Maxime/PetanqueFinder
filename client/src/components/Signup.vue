@@ -6,10 +6,13 @@
       </div>
     </div>
     <div class="row">
-      <form class="col-md-12" @submit.prevent="addUser">
+      <form class="col-md-12" @submit.prevent="validateBeforeSubmit">
          <div class="row">
              <div class="col-md-12 form-group">
                  <label class="label">Email</label>
+                 <div v-if="errorEmail = true" class="alert alert-danger" role="alert">
+                    A simple danger alert—check it out!
+                 </div>
                  <p class="">
                      <input name="email" v-model="email" v-validate.initial="'required|email'" :class="{'input form-control': true, 'is-danger': errors.has('email') }" type="text" placeholder="Email">
                      <i v-show="errors.has('email')" class="fa fa-warning"></i>
@@ -88,7 +91,7 @@
             </div>          
          </div>
          <div class="row">
-            <button class="btn btn-primary btn-block" type="submit">Submit</button>
+            <button :disabled="errors.any() || !validateBeforeSubmit" class="btn btn-primary btn-block" v-on:click="addUser();" type="submit">Submit</button>
          </div>
       </form>
     </div>
@@ -117,6 +120,15 @@ export default {
     city:''
   }),
   methods: {
+    validateBeforeSubmit() {
+      this.$validator.validateAll().then((result) => {
+        if (result) {
+          return true;
+        }
+          return false;
+      });
+    },
+
     async addUser() {
       await SignupService.addUser({
         email: this.email,
@@ -127,6 +139,10 @@ export default {
         address: this.address,
         postcode: this.postcode,
         city: this.city
+      }).then(function(response){
+        //email: response.data.success
+        var errorEmail = response.data.errorEmail;
+        console.log(errorEmail);
       })
       this.$router.push({ name: 'Signup' })
     }
