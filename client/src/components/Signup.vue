@@ -106,10 +106,10 @@ import { Validator } from 'vee-validate';
 import SignupService from '@/services/auth/SignupService'
 
 Vue.use(VeeValidate);
-
 export default {
   name: 'Signup',
   data: () => ({
+    errorEmail: false,
     email: '',
     password: '',
     first_name: '',
@@ -141,8 +141,8 @@ export default {
         city: this.city
       }).then(function(response){
         //email: response.data.success
-        var errorEmail = response.data.errorEmail;
-        console.log(errorEmail);
+        this.errorEmail = true;
+        console.log(this.errorEmail);
       })
       this.$router.push({ name: 'Signup' })
     }
