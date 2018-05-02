@@ -141,8 +141,8 @@ export default {
         city: this.city
       }).then(function(response){
         //email: response.data.success
-        this.errorEmail = true;
-        console.log(this.errorEmail);
+        errorEmail = true;
+        console.log(response);
       })
       this.$router.push({ name: 'Signup' })
     }
