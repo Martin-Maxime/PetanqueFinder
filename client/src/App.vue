@@ -1,6 +1,6 @@
-<template>
+<!-- <template>
   <div id="app">
-    <router-view/>
+    test
   </div>
 </template>
 
@@ -20,3 +20,4 @@ export default {
   margin-top: 60px;
 }
 </style>
+ -->

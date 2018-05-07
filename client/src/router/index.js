@@ -1,5 +1,6 @@
 import Vue from 'vue'
 import Router from 'vue-router'
+import App from '@/components/App'
 import HelloWorld from '@/components/HelloWorld'
 import Users from '@/components/Users'
 import Signup from '@/components/Signup'
@@ -10,8 +11,8 @@ export default new Router({
   mode: 'history',
   routes: [{
     path: '/',
-    name: 'HelloWorld',
-    component: HelloWorld
+    name: 'App',
+    component: App
   },
   {
     path: '/users',
