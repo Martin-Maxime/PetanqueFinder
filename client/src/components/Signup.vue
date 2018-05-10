@@ -6,7 +6,7 @@
       </div>
     </div>
     <div class="row">
-      <form class="col-md-12" @submit.prevent="addUser">
+      <form class="col-md-12" @submit.prevent="validateBeforeSubmit">
          <div class="row">
              <div class="col-md-12 form-group">
                  <label class="label">Email</label>
@@ -117,6 +117,18 @@ export default {
     city:''
   }),
   methods: {
+    validateBeforeSubmit(addUser) {
+      this.$validator.validateAll().then((result) => {
+        if (result) {
+          // eslint-disable-next-line
+          alert('Form Submitted!');
+          addUser();
+          return;
+        }
+
+        alert('Correct them errors!');
+      });
+    },
     async addUser() {
       await SignupService.addUser({
         email: this.email,

@@ -10,7 +10,7 @@ var User = require("../models/users");
 
 router.post('/signup', function(req, res) {
   if (!req.body.email || !req.body.password ) {
-    res.json({success: false, msg: 'Please pass username and password.'});
+    res.json({success: false, msg: 'Please pass email and password.'});
   } else if (!req.body.email) {
     res.json({succress: false, msg: 'Please pass email.'})
   }
