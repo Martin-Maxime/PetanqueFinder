@@ -1,12 +1,18 @@
-<!-- <template>
+<template>
   <div id="app">
-    test
+    <header-component></header-component>
+    <router-view></router-view>
   </div>
 </template>
 
 <script>
+
+import HeaderComponent from './components/layout/header/Header.vue';
 export default {
-  name: 'App'
+  name: 'app',
+  components: {
+    'header-component': HeaderComponent
+  }
 }
 </script>
 
@@ -15,9 +21,7 @@ export default {
   font-family: 'Avenir', Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  text-align: center;
   color: #2c3e50;
-  margin-top: 60px;
+  text-align: center;
 }
 </style>
- -->

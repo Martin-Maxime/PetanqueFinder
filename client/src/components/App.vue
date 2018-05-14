@@ -1,4 +1,4 @@
-<template>
+<!-- <template>
 	<header-component></header-component>
 </template>
 
@@ -11,4 +11,4 @@ export default {
   	'header-component': HeaderComponent
   }
 }
-</script>
+</script> -->
