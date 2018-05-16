@@ -1,6 +1,7 @@
 <template>
   <header>
     <h1>Pétanque finder</h1>
+    <span class="icon-LOGIN"></span>
   </header>
 </template>
 
@@ -19,6 +20,10 @@ export default {
 			line-height: 90px;
 			color: #FFF;
 			text-transform: uppercase;
+		}
+		span {
+			float: right;
+			margin-right: 20px;
 		}
 	}
 </style>
