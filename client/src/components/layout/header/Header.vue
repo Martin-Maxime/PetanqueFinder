@@ -1,14 +1,25 @@
 <template>
   <header>
-    <h1>Pétanque finder</h1>
-    <span class="icon-LOGIN"></span>
+  	<div class="row">
+  		<div class="col-md-2"></div>
+  		<div class="logo col-md-8">
+  			<h1>Pétanque finder</h1>
+  		</div>
+  		<div class="col-md-2">
+  			<login-component></login-component>
+  		</div>
+  	</div>
   </header>
 </template>
 
 <script>
 
+import LoginComponent from './../../auth/login/Login.vue';
 export default {
-  name: 'HeaderComponent'
+	name: 'HeaderComponent',
+	components: {
+		'login-component': LoginComponent
+	}
 }
 </script>
 
@@ -16,14 +27,13 @@ export default {
 	header {
 		height: 90px;
 		background-color: #42b983;
-		h1 {
-			line-height: 90px;
-			color: #FFF;
-			text-transform: uppercase;
-		}
-		span {
-			float: right;
-			margin-right: 20px;
+		div.logo {
+			h1 {
+				line-height: 90px;
+				color: #FFF;
+				text-transform: uppercase;
+				margin: 0;
+			}
 		}
 	}
 </style>
