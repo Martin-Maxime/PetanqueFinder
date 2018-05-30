@@ -58,7 +58,7 @@
                <label class="label">Date de naissance</label>
                   <p class="">
                     <input name="date_limit" value="01/01/2017" type="hidden">
-                    <input name="birthday" value="01/01/2017" v-model="birthday" v-validate.initial="'required|before:01/01/2018'" :class="{'input form-control': true, 'is-danger': errors.has('birthday') }" type="date">
+                    <input name="birthday" value="01/01/2017" v-model="birthday" v-validate.initial="'required'" :class="{'input form-control': true, 'is-danger': errors.has('birthday') }" type="date">
                      <i v-show="errors.has('birthday')" class="fa fa-warning"></i>
                      <span v-show="errors.has('birthday')" class="help is-danger">{{ errors.first('birthday') }}</span>
                   </p>

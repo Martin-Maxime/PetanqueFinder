@@ -36,14 +36,14 @@ router.post('/signup', function(req, res) {
   }
 });
 
-router.post('/signin', function(req, res) {
+router.post('/login', function(req, res) {
   User.findOne({
-    username: req.body.username
+    email: req.body.email
   }, function(err, user) {
     if (err) throw err;
 
     if (!user) {
-      res.status(401).send({success: false, msg: 'Authentication failed. User not found.'});
+      res.status(401).send({success: false, msg: 'Authentication failed. User not found.', userNotFound: true});
     } else {
       // check if password matches
       user.comparePassword(req.body.password, function (err, isMatch) {
@@ -55,7 +55,7 @@ router.post('/signin', function(req, res) {
           // return the information including token as JSON
           res.json({success: true, token: 'JWT ' + token});
         } else {
-          res.status(401).send({success: false, msg: 'Authentication failed. Wrong password.'});
+          res.status(401).send({success: false, msg: 'Authentication failed. Wrong password.', errorPassword: true});
         }
       });
     }
