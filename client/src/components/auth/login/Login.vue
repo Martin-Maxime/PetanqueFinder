@@ -1,7 +1,7 @@
 <template>
 	<div class="login">
 		<a><span v-on:click="displayLogin" class="icon-LOGIN"></span></a>
-		<div ref="connect" class="connect-wrapper">
+		<div v-on-clickaway="away" ref="connect" class="connect-wrapper">
 			<form class="col-md-12" @submit.prevent="checkLogin">
 				<div class="row">
 					<div class="col-md-12 form-group">
@@ -46,7 +46,7 @@
  
 <script>
 import LoginService from '@/services/auth/LoginService';
-import { mixin as clickaway } from '@/directives/outside-click';
+import { mixin as clickaway } from 'vue-clickaway';
 export default {
 	name: 'LoginComponent',
 	data: () => ({
@@ -55,6 +55,7 @@ export default {
 	    email: '',
 	    password: '',
 	}),
+	mixins: [ clickaway ],
   	methods: {
 	    displayLogin: function (event) {
 		    var element = this.$refs.connect;
@@ -65,13 +66,21 @@ export default {
 				email: this.email,
 				password: this.password,
 			}).then(response => {
-				console.log(this.errorPassword)
-				console.log('ok')		
+				let token = response.data.token;
+				localStorage.setItem('user-token', token);			
 			}).catch(error => {
 		        this.errorPassword = error.response.data.errorPassword;
 		        this.errorEmail = error.response.data.userNotFound;
+		        localStorage.removeItem('user-token');
 			})
-	    }
+	    },
+        away: function() {
+        	var clickElement = event.target;
+        	if(clickElement.className != 'icon-LOGIN') {
+				var element = this.$refs.connect;
+				element.classList.remove('active');
+        	}
+	    },
 	}
 }
 </script>
