@@ -49,16 +49,27 @@ router.post('/login', function(req, res) {
       user.comparePassword(req.body.password, function (err, isMatch) {
         if (isMatch && !err) {
           // if user is found and password is right create a token
-          const token = jwt.sign(user.toJSON(), config.secret, {
+          const token = jwt.sign({id: user._id}, config.secret, {
             expiresIn: 604800 // 1 week
           });
           // return the information including token as JSON
-          res.json({success: true, token: 'JWT ' + token});
+          res.json({success: true, token: 'JWT ' + token, user: user});
         } else {
           res.status(401).send({success: false, msg: 'Authentication failed. Wrong password.', errorPassword: true});
         }
       });
     }
+  });
+});
+
+router.get('/me', function(req, res) {
+  var token = req.headers['x-access-token'];
+  if (!token) return res.status(401).send({ auth: false, message: 'No token provided.' });
+  
+  jwt.verify(token, config.secret, function(err, decoded) {
+    if (err) return res.status(500).send({ auth: false, message: 'Failed to authenticate token.' });
+    
+    res.status(200).send(decoded);
   });
 });
 
@@ -69,7 +80,7 @@ router.get('/users', function(req, res) {
       users: users
     })
   }).sort({_id:-1})
-})
+});
 
 getToken = function (headers) {
   if (headers && headers.authorization) {

@@ -1,7 +1,7 @@
 <template>
 	<div class="login">
 		<a><span v-on:click="displayLogin" class="icon-LOGIN"></span></a>
-		<div v-on-clickaway="away" ref="connect" class="connect-wrapper">
+		<div v-if="!isLoggedIn() || !this.isLogged" v-on-clickaway="away" ref="connect" class="connect-wrapper">
 			<form class="col-md-12" @submit.prevent="checkLogin">
 				<div class="row">
 					<div class="col-md-12 form-group">
@@ -41,17 +41,23 @@
 				</div>
 			</form>
 		</div>
+		<div v-if="isLoggedIn() || this.isLogged" v-on-clickaway="away" ref="connect" class="connect-wrapper">
+			Bonjour
+			<a href="" @click="logout()">Déconnexion</a>
+		</div>
  	</div>
 </template>
  
 <script>
 import LoginService from '@/services/auth/LoginService';
+import {isLoggedIn, logout} from '@/services/auth/LoginService';
 import { mixin as clickaway } from 'vue-clickaway';
 export default {
 	name: 'LoginComponent',
 	data: () => ({
 		errorEmail: false,
 		errorPassword: false,
+		isLogged: false,
 	    email: '',
 	    password: '',
 	}),
@@ -67,12 +73,24 @@ export default {
 				password: this.password,
 			}).then(response => {
 				let token = response.data.token;
-				localStorage.setItem('user-token', token);			
+				let user = response.data.user;
+				let userInfos = {'address': user.address, 'birthday': user.birthday, 'city': user.city, 'email': user.email, 'firstname': user.firstname, 'lastname': user.lastname, 'postcode': user.postcode};
+				localStorage.setItem('user-token', token);
+				localStorage.setItem('user-infos', JSON.stringify(userInfos));	
+				this.isLogged = true;
 			}).catch(error => {
 		        this.errorPassword = error.response.data.errorPassword;
 		        this.errorEmail = error.response.data.userNotFound;
 		        localStorage.removeItem('user-token');
+		        localStorage.removeItem('user-infos');
+		        this.isLogged = false;
 			})
+	    },
+        isLoggedIn() {
+	      return isLoggedIn();
+	    },
+	    logout() {
+	    	return logout();
 	    },
         away: function() {
         	var clickElement = event.target;
