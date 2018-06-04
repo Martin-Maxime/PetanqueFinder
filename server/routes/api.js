@@ -50,7 +50,7 @@ router.post('/login', function(req, res) {
         if (isMatch && !err) {
           // if user is found and password is right create a token
           const token = jwt.sign({id: user._id}, config.secret, {
-            expiresIn: 604800 // 1 week
+            expiresIn: 86400 // 1 week
           });
           // return the information including token as JSON
           res.json({success: true, token: 'JWT ' + token, user: user});

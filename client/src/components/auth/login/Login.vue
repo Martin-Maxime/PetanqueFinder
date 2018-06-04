@@ -41,9 +41,22 @@
 				</div>
 			</form>
 		</div>
-		<div v-if="isLoggedIn() || this.isLogged" v-on-clickaway="away" ref="connect" class="connect-wrapper">
-			Bonjour
-			<a href="" @click="logout()">Déconnexion</a>
+		<div v-if="isLoggedIn() || this.isLogged" v-on-clickaway="away" ref="connect" class="col-md-12 connect-wrapper">
+			<div class="row">
+				<div class="col-md-12">
+					Bonjour {{this.userStorage.firstname}}
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-md-12">
+					<router-link class="myAccount-link" to="/user/Account">Mon compte</router-link>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-md-12">
+					<a href="" @click="logout()">Déconnexion</a>
+				</div>
+			</div>
 		</div>
  	</div>
 </template>
@@ -60,6 +73,7 @@ export default {
 		isLogged: false,
 	    email: '',
 	    password: '',
+	    userStorage: [],
 	}),
 	mixins: [ clickaway ],
   	methods: {
@@ -74,7 +88,7 @@ export default {
 			}).then(response => {
 				let token = response.data.token;
 				let user = response.data.user;
-				let userInfos = {'address': user.address, 'birthday': user.birthday, 'city': user.city, 'email': user.email, 'firstname': user.firstname, 'lastname': user.lastname, 'postcode': user.postcode};
+				let userInfos = {'userid': user._id, 'address': user.address, 'birthday': user.birthday, 'city': user.city, 'email': user.email, 'firstname': user.firstname, 'lastname': user.lastname, 'postcode': user.postcode};
 				localStorage.setItem('user-token', token);
 				localStorage.setItem('user-infos', JSON.stringify(userInfos));	
 				this.isLogged = true;
@@ -99,7 +113,10 @@ export default {
 				element.classList.remove('active');
         	}
 	    },
-	}
+	},
+    created: function() {
+    	this.userStorage = JSON.parse(localStorage.getItem('user-infos') || '[]');
+    },
 }
 </script>
 
@@ -122,7 +139,7 @@ export default {
 			right: 50px;
 			width: 250px;
 			height: auto;
-			padding: 15px 0;
+			padding: 15px 15px;
 			border-radius: 5px;
 			background-color: #FFF;
 			border: 1px solid #000;
