@@ -32,7 +32,6 @@ export function isLoggedIn() {
 	const idToken = getIdToken();
 	return !!idToken && !isTokenExpired(idToken);
 	var userStorage = localStorage.getItem('user-infos');
-	console.log(userStorage);
 }
 
 function getTokenExpirationDate(encodedToken) {

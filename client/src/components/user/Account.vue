@@ -6,6 +6,12 @@
          </div>
       </div>
       <div class="row">
+         <div v-if="this.isErrorEmail" class="alert alert-danger" role="alert">
+            Cette adresse email est déjà existante sur notre site, veuillez en choisir une autre.
+         </div>
+         <div v-if="this.accountCreated" class="alert alert-success" role="alert">
+            Votre compte a bien été crée.
+         </div>
          <form class="col-md-12 update-form" @submit.prevent="validateBeforeSubmit">
             <div class="row">
                 <div class="col-md-12 form-group">
@@ -30,12 +36,6 @@
             <div class="row">
                 <div class="col-md-12 form-group">
                     <label class="label">Email</label>
-                    <div v-if="this.isErrorEmail" class="alert alert-danger" role="alert">
-                       Cette adresse email est déjà existante sur notre site, veuillez en choisir une autre.
-                    </div>
-                     <div v-if="this.accountCreated" class="alert alert-success" role="alert">
-                       Votre compte a bien été crée.
-                    </div>
                     <p class="">
                         <input name="email" v-model="email" v-validate.initial="'required|email'" :class="{'input form-control': true, 'is-danger': errors.has('email') }" type="text" placeholder="Email">
                         <i v-show="errors.has('email')" class="fa fa-warning"></i>
@@ -85,7 +85,7 @@
                </div>          
             </div>
             <div class="row">
-               <button :disabled="errors.any() || !validateBeforeSubmit" class="btn btn-primary btn-block" v-on:click="addUser();" type="submit">Submit</button>
+               <button :disabled="checkErrors() || !validateBeforeSubmit" class="btn btn-primary btn-block" v-on:click="addUser();" type="submit">Submit</button>
             </div>
          </form>
       </div>
@@ -127,7 +127,7 @@
                 </div>         
             </div>
             <div class="row">
-               <button :disabled="errors.any() || !validateBeforeSubmit" class="btn btn-primary btn-block" v-on:click="addUser();" type="submit">Submit</button>
+               <button :disabled="checkPassword() || !validateBeforeSubmit" class="btn btn-primary btn-block" v-on:click="addUser();" type="submit">Submit</button>
             </div>
          </form>
       </div>
@@ -137,11 +137,12 @@
 <script>
 import VeeValidate from 'vee-validate';
 import { Validator } from 'vee-validate';
+import SignupService from '@/services/auth/SignupService'
 export default {
    name: 'My-Account',
    data: () => ({
       isErrorEmail: false,
-      accountCreated: false,
+      accountUpdated: false,
       email: '',
       password: '',
       first_name: '',
@@ -152,20 +153,62 @@ export default {
       city:''
    }),
    methods: {
+      checkErrors() {
+         let checkErrors = false;
+         this.errors.items.forEach(function(element){
+            if(element.field != 'password') {
+               checkErrors = true;
+            }
+         })
+         return checkErrors;
+      },
+      checkPassword() {
+         let checkPassword = false;
+         this.errors.items.forEach(function(element){
+            if(element.field === 'password') {
+               checkPassword = true;
+            }
+         })
+         return checkPassword;
+      },
       validateBeforeSubmit() {
          this.$validator.validateAll().then((result) => {
             if (result) {
                return true;
-           }
+            }
             return false;
          });
       },
    },
+   async updateUserInfos() {
+      await SignupService.updateUserInfos({
+         email: this.email,
+         password: this.password,
+         first_name: this.first_name,
+         last_name: this.last_name,
+         birthday: this.birthday,
+         address: this.address,
+         postcode: this.postcode,
+         city: this.city
+      }).then(response => {
+         this.accountUpdated = true;
+         this.isErrorEmail = false;
+      }).catch(error => {
+         console.log(error)
+         this.isErrorEmail = true;
+         this.accountCreated = false;
+      })
+      this.$router.push({ name: 'My-Account' })
+   },
    created: function() {
       this.userStorage = JSON.parse(localStorage.getItem('user-infos') || '[]');
-   },
-   mounted: function() {
-      this.firstname = this.userStorage.firstname;
+      this.first_name = this.userStorage.firstname;
+      this.last_name = this.userStorage.lastname;
+      this.email = this.userStorage.email;
+      this.birthday = this.userStorage.birthday;
+      this.address = this.userStorage.address;
+      this.postcode = this.userStorage.postcode;
+      this.city = this.userStorage.city;
    }
 }
 </script>

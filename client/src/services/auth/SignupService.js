@@ -5,3 +5,7 @@ export default {
     return Api().post('signup', params)
   }
 }
+
+function updateUserInfos() {
+	return Api().put('account', params)
+}
