@@ -84,7 +84,7 @@ router.put('/user/account', function(req, res) {
               if (err) {
                 return res.status(400).json({success: false, msg: 'Update failed'});
               } else {
-                res.json({success: true, msg: 'Account is updated', accountUpdated: true});
+                res.json({success: true, msg: 'password is updated', accountUpdated: true});
               }          
             })
           });
@@ -93,8 +93,24 @@ router.put('/user/account', function(req, res) {
           res.status(401).send({success: false, msg: 'Authentication failed. Wrong password.', errorPassword: true});
         }
       });
-    } else {
-      console.log('outside');
+    } else if (req.body.email) {
+        User.updateOne({_id: req.body.id}, {$set: 
+        {
+          firstname: req.body.first_name,
+          lastname: req.body.last_name,
+          email:    req.body.email,
+          birthday: req.body.birthday,
+          address: req.body.address,
+          postcode: req.body.postcode,
+          city: req.body.city
+        }
+        }, function(err, result) {
+          if (err) {
+            return res.status(400).json({success: false, msg: 'Update failed', accountUpdated: false});
+          } else {
+            res.json({success: true, msg: 'Account informations are updated', accountUpdated: true});
+          }          
+        })
     }
   });
 });

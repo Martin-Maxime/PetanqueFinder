@@ -6,11 +6,13 @@
          </div>
       </div>
       <div class="row">
-         <div v-if="this.isErrorEmail" class="alert alert-danger" role="alert">
-            Cette adresse email est déjà existante sur notre site, veuillez en choisir une autre.
-         </div>
-         <div v-if="this.accountUpdated" class="alert alert-success" role="alert">
-            Votre compte a bien été modifié.
+         <div class="col-md-12">
+            <div v-if="this.isErrorEmail" class="col-md-12 alert alert-danger" role="alert">
+               Cette adresse email est déjà existante sur notre site, veuillez en choisir une autre.
+            </div>
+            <div v-if="this.accountUpdated" class="col-md-12 alert alert-success" role="alert">
+               Les informations de votre compte ont bien été mises à jour.
+            </div>
          </div>
          <form class="col-md-12 update-form" @submit.prevent="validateBeforeSubmit">
             <div class="row">
@@ -85,7 +87,7 @@
                </div>          
             </div>
             <div class="row">
-               <button :disabled="checkErrors() || !validateBeforeSubmit" class="btn btn-primary btn-block" v-on:click="addUser();" type="submit">Submit</button>
+               <button :disabled="checkErrors() || !validateBeforeSubmit" class="btn btn-primary btn-block" v-on:click="updateUserInfos();" type="submit">Submit</button>
             </div>
          </form>
       </div>
@@ -95,10 +97,14 @@
          </div>
       </div>
       <div class="row">
-         <div v-if="this.passwordUpdated" class="alert alert-success" role="alert">
-            Votre compte a bien été modifié.
-         </div>
          <form class="col-md-12 update-form" @submit.prevent="validateBeforeSubmit">
+            <div class="row">
+               <div class="col-md-12">
+                  <div v-if="this.passwordUpdated" class="alert alert-success" role="alert">
+                     Votre mot de passe a bien été modifié.
+                  </div>
+               </div>
+            </div>
             <div class="row">
                 <div class="col-md-12 form-group">
                     <label class="label">Mot de passe actuel</label>
@@ -107,7 +113,10 @@
                         <i v-show="errors.has('password')" class="fa fa-warning"></i>
                         <span v-show="errors.has('password')" class="help is-danger">{{ errors.first('password') }}</span>
                     </p>
-                </div>         
+                    <div v-if="this.errorPassword" class="col-md-12 alert alert-danger" role="alert">
+                       Votre mot de passe actuel n'est pas correct.
+                     </div>    
+                </div>     
             </div>
             <div class="row">
                 <div class="col-md-12 form-group">
@@ -147,6 +156,7 @@ export default {
       isErrorEmail: false,
       accountUpdated: false,
       passwordUpdated: false,
+      errorPassword: false,
       userId: '',
       email: '',
       password: '',
@@ -163,7 +173,7 @@ export default {
       checkErrors() {
          let checkErrors = false;
          this.errors.items.forEach(function(element){
-            if(element.field != 'password') {
+            if(element.field != 'password' && element.field != 'new_password' && element.field != 'new_password_confirmation' ) {
                checkErrors = true;
             }
          })
@@ -188,10 +198,10 @@ export default {
       },
       async updateUserInfos() {
          await SignupService.updateUserInfos({
-            email: this.email,
-            password: this.password,
+            id: this.userStorage.userid,
             first_name: this.first_name,
             last_name: this.last_name,
+            email: this.email,
             birthday: this.birthday,
             address: this.address,
             postcode: this.postcode,
@@ -199,11 +209,12 @@ export default {
          }).then(response => {
             this.accountUpdated = true;
             this.isErrorEmail = false;
+            let userInfos = {'userid': this.userStorage.userid, 'address': this.address, 'birthday': this.birthday, 'city': this.city, 'email': this.email, 'firstname': this.first_name, 'lastname': this.last_name, 'postcode': this.postcode};
+            localStorage.setItem('user-infos', JSON.stringify(userInfos));
          }).catch(error => {
-            console.log(error)
             this.isErrorEmail = true;
+            this.accountUpdated = false;
          })
-         this.$router.push({ name: 'My-Account' })
       },
       async updateUserPassword() {
          await SignupService.updateUserPassword({
@@ -211,11 +222,12 @@ export default {
             password: this.password,
             new_password: this.new_password
          }).then(response => {
+            this.errorPassword = false;
             this.passwordUpdated = true;
          }).catch(error => {
-            console.log(error)
+            this.errorPassword = true;
+            this.passwordUpdated = false;
          })
-         this.$router.push({ name: 'My-Account' })
       }
    },
    created: function() {
