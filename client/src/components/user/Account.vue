@@ -9,8 +9,8 @@
          <div v-if="this.isErrorEmail" class="alert alert-danger" role="alert">
             Cette adresse email est déjà existante sur notre site, veuillez en choisir une autre.
          </div>
-         <div v-if="this.accountCreated" class="alert alert-success" role="alert">
-            Votre compte a bien été crée.
+         <div v-if="this.accountUpdated" class="alert alert-success" role="alert">
+            Votre compte a bien été modifié.
          </div>
          <form class="col-md-12 update-form" @submit.prevent="validateBeforeSubmit">
             <div class="row">
@@ -95,12 +95,15 @@
          </div>
       </div>
       <div class="row">
+         <div v-if="this.passwordUpdated" class="alert alert-success" role="alert">
+            Votre compte a bien été modifié.
+         </div>
          <form class="col-md-12 update-form" @submit.prevent="validateBeforeSubmit">
             <div class="row">
                 <div class="col-md-12 form-group">
                     <label class="label">Mot de passe actuel</label>
                     <p class="">
-                        <input name="password" v-model="password" v-validate.initial="'required|min:6'" :class="{'input form-control': true, 'is-danger': errors.has('password') }" type="password" placeholder="Mot de passe">
+                        <input name="password" v-model="password" v-validate.initial="'required|min:6'" :class="{'input form-control': true, 'is-danger': errors.has('password') }" type="password" placeholder="Tapez votre ancien mot de passe">
                         <i v-show="errors.has('password')" class="fa fa-warning"></i>
                         <span v-show="errors.has('password')" class="help is-danger">{{ errors.first('password') }}</span>
                     </p>
@@ -108,11 +111,11 @@
             </div>
             <div class="row">
                 <div class="col-md-12 form-group">
-                    <label class="label">Nouveau mot de passe</label>
+                    <label class="label">Tapez votre nouveau mot de passe</label>
                     <p class="">
-                        <input name="password" v-model="password" v-validate.initial="'required|min:6'" :class="{'input form-control': true, 'is-danger': errors.has('password') }" type="password" placeholder="Mot de passe">
-                        <i v-show="errors.has('password')" class="fa fa-warning"></i>
-                        <span v-show="errors.has('password')" class="help is-danger">{{ errors.first('password') }}</span>
+                        <input name="new_password" v-model="new_password" v-validate.initial="'required|min:6'" :class="{'input form-control': true, 'is-danger': errors.has('new_password') }" type="password" placeholder="Votre nouveau mot de passe">
+                        <i v-show="errors.has('new_password')" class="fa fa-warning"></i>
+                        <span v-show="errors.has('new_password')" class="help is-danger">{{ errors.first('new_password') }}</span>
                     </p>
                 </div>         
             </div>
@@ -120,14 +123,14 @@
                 <div class="col-md-12 form-group">
                     <label class="label">Confirmation du nouveau mot de passe</label>
                     <p class="">
-                        <input name="password" v-model="password" v-validate.initial="'required|min:6'" :class="{'input form-control': true, 'is-danger': errors.has('password') }" type="password" placeholder="Mot de passe">
-                        <i v-show="errors.has('password')" class="fa fa-warning"></i>
-                        <span v-show="errors.has('password')" class="help is-danger">{{ errors.first('password') }}</span>
+                        <input name="new_password_confirmation" v-model="new_password_confirmation" v-validate.initial="'required|confirmed:new_password'" :class="{'input form-control': true, 'is-danger': errors.has('new_password_confirmation') }" type="password" placeholder="Retapez votre nouveau mot de passe" data-vv-as="new_password">
+                        <i v-show="errors.has('new_password_confirmation')" class="fa fa-warning"></i>
+                        <span v-show="errors.has('new_password_confirmation')" class="help is-danger">{{ errors.first('new_password_confirmation') }}</span>
                     </p>
                 </div>         
             </div>
             <div class="row">
-               <button :disabled="checkPassword() || !validateBeforeSubmit" class="btn btn-primary btn-block" v-on:click="addUser();" type="submit">Submit</button>
+               <button :disabled="checkPassword() || !validateBeforeSubmit" class="btn btn-primary btn-block" v-on:click="updateUserPassword();" type="submit">Submit</button>
             </div>
          </form>
       </div>
@@ -137,14 +140,18 @@
 <script>
 import VeeValidate from 'vee-validate';
 import { Validator } from 'vee-validate';
-import SignupService from '@/services/auth/SignupService'
+import SignupService from '@/services/auth/SignupService';
 export default {
    name: 'My-Account',
    data: () => ({
       isErrorEmail: false,
       accountUpdated: false,
+      passwordUpdated: false,
+      userId: '',
       email: '',
       password: '',
+      new_password: '',
+      new_password_confirmation: '',
       first_name: '',
       last_name: '',
       birthday: '',
@@ -165,7 +172,7 @@ export default {
       checkPassword() {
          let checkPassword = false;
          this.errors.items.forEach(function(element){
-            if(element.field === 'password') {
+            if(element.field === 'password' || element.field === 'new_password' || element.field === 'new_password_confirmation') {
                checkPassword = true;
             }
          })
@@ -179,26 +186,37 @@ export default {
             return false;
          });
       },
-   },
-   async updateUserInfos() {
-      await SignupService.updateUserInfos({
-         email: this.email,
-         password: this.password,
-         first_name: this.first_name,
-         last_name: this.last_name,
-         birthday: this.birthday,
-         address: this.address,
-         postcode: this.postcode,
-         city: this.city
-      }).then(response => {
-         this.accountUpdated = true;
-         this.isErrorEmail = false;
-      }).catch(error => {
-         console.log(error)
-         this.isErrorEmail = true;
-         this.accountCreated = false;
-      })
-      this.$router.push({ name: 'My-Account' })
+      async updateUserInfos() {
+         await SignupService.updateUserInfos({
+            email: this.email,
+            password: this.password,
+            first_name: this.first_name,
+            last_name: this.last_name,
+            birthday: this.birthday,
+            address: this.address,
+            postcode: this.postcode,
+            city: this.city
+         }).then(response => {
+            this.accountUpdated = true;
+            this.isErrorEmail = false;
+         }).catch(error => {
+            console.log(error)
+            this.isErrorEmail = true;
+         })
+         this.$router.push({ name: 'My-Account' })
+      },
+      async updateUserPassword() {
+         await SignupService.updateUserPassword({
+            id: this.userStorage.userid,
+            password: this.password,
+            new_password: this.new_password
+         }).then(response => {
+            this.passwordUpdated = true;
+         }).catch(error => {
+            console.log(error)
+         })
+         this.$router.push({ name: 'My-Account' })
+      }
    },
    created: function() {
       this.userStorage = JSON.parse(localStorage.getItem('user-infos') || '[]');

@@ -62,6 +62,43 @@ router.post('/login', function(req, res) {
   });
 });
 
+router.put('/user/account', function(req, res) {
+  User.findOne({
+    _id: req.body.id,
+  }, function(err, user) {
+    if (err) throw err;
+
+    if (!user) {
+      res.status(401).send({success: false, msg: 'Authentication failed. User not found.', userNotFound: true});
+    } 
+    else if (req.body.password) {
+      // check if password matches
+      user.comparePassword(req.body.password, function (err, isMatch) {
+        if (isMatch && !err) {
+          user.cryptPassword(req.body.new_password, function(err, crypted) {
+            User.updateOne({_id: req.body.id}, {$set: 
+            {
+              password: crypted,
+            }
+            }, function(err, result) {
+              if (err) {
+                return res.status(400).json({success: false, msg: 'Update failed'});
+              } else {
+                res.json({success: true, msg: 'Account is updated', accountUpdated: true});
+              }          
+            })
+          });
+          // return the information including token as JSON
+        } else {
+          res.status(401).send({success: false, msg: 'Authentication failed. Wrong password.', errorPassword: true});
+        }
+      });
+    } else {
+      console.log('outside');
+    }
+  });
+});
+
 router.get('/me', function(req, res) {
   var token = req.headers['x-access-token'];
   if (!token) return res.status(401).send({ auth: false, message: 'No token provided.' });
