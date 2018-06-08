@@ -2,6 +2,9 @@
 	<div class="login">
 		<a><span v-on:click="displayLogin" class="icon-LOGIN"></span></a>
 		<div v-if="!isLoggedIn() || !this.isLogged" v-on-clickaway="away" ref="connect" class="connect-wrapper">
+			<div class="col-md-12 facebooklog">
+				<button type="button" class="col-md-12 btn btn-primary btn-block" @click="openFbLoginDialog">Facebook Login</button>
+			</div>
 			<form class="col-md-12" @submit.prevent="checkLogin">
 				<div class="row">
 					<div class="col-md-12 form-group">
@@ -106,6 +109,11 @@ export default {
 	    logout() {
 	    	return logout();
 	    },
+		openFbLoginDialog () {
+			FB.login(function(response) {
+				console.log(response);
+			}, { scope: 'email' })
+		},
         away: function() {
         	var clickElement = event.target;
         	if(clickElement.className != 'icon-LOGIN') {
@@ -146,6 +154,9 @@ export default {
 			text-align: left;
 			&.active {
 				display: block;
+			}
+			div.facebooklog {
+				margin-bottom: 15px;
 			}
 			div.form-group {
 				div.wrong {
