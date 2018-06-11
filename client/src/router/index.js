@@ -5,6 +5,7 @@ import VueRouter from 'vue-router'
 import HelloWorld from '@/components/HelloWorld'
 import Users from '@/components/Users'
 import Signup from '@/components/Signup'
+import Signin from '@/components/auth/login/signin'
 import Account from '@/components/user/Account'
 
 Vue.use(Router)
@@ -25,7 +26,14 @@ const router = new VueRouter({
   {
     path: '/signup',
     name: 'Signup',
-    component: Signup
+    component: Signup,
+    meta: {requiresAuth: false} 
+  },
+  {
+    path: '/signin',
+    name: 'Signin',
+    component: Signin,
+    meta: {requiresAuth: false} 
   },
   {
     path: '/user/account',
@@ -41,12 +49,13 @@ router.beforeEach((to, from, next) => {
     if (user) {
       next()
     } else {
-      next({ name: 'HelloWorld', query: { redirect: to.fullPath } })
+      next({ name: 'Signin', path: '/singin', query: { redirect: to.fullPath } })
     }
   } else {
-    if (user && to.name !== 'public') {
-      next({ name: HelloWorld })
-    } else {
+    if (user && to.matched.some(record => record.meta.requiresAuth === false)) {
+      next({ name: 'HelloWorld', query: { redirect: to.fullPath } })
+    }
+    else {
       next()
     }
   }
