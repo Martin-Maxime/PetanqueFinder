@@ -1,9 +1,7 @@
 <template>
 	<div class="login container">
 		<div v-if="!isLoggedIn() || !this.isLogged" ref="connect" class="signin-wrapper">
-			<div class="col-md-12 facebooklog">
-				<button type="button" class="col-md-12 btn btn-primary btn-block" @click="openFbLoginDialog">Facebook Login</button>
-			</div>
+			<facebooklogin-component></facebooklogin-component>
 			<form class="col-md-12" @submit.prevent="checkLogin">
 				<div class="row">
 					<div class="col-md-12 form-group">
@@ -50,10 +48,14 @@
 </template>
  
 <script>
+import FacebookLogin from '@/components/auth/login/FacebookLogin.vue';
 import LoginService from '@/services/auth/LoginService';
 import {isLoggedIn, logout} from '@/services/auth/LoginService';
 export default {
 	name: 'Signin',
+	components: {
+		'facebooklogin-component': FacebookLogin
+	},
 	data: () => ({
 		errorEmail: false,
 		errorPassword: false,
@@ -89,11 +91,6 @@ export default {
 	    logout() {
 	    	return logout();
 	    },
-		openFbLoginDialog () {
-			FB.login(function(response) {
-				console.log(response);
-			}, { scope: 'email' })
-		},
 	},
     created: function() {
     	this.userStorage = JSON.parse(localStorage.getItem('user-infos') || '[]');
@@ -115,9 +112,6 @@ export default {
 		div.signin-wrapper {
 			width: 400px;
 			margin: 0 auto;
-			div.facebooklog {
-				margin: 30px 0 15px 0;
-			}
 			div.form-group {
 				div.wrong {
 					color: red;

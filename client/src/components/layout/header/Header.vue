@@ -14,7 +14,7 @@
 
 <script>
 
-import LoginComponent from './../../auth/login/Login.vue';
+import LoginComponent from '@/components/auth/login/Login.vue';
 export default {
 	name: 'HeaderComponent',
 	components: {

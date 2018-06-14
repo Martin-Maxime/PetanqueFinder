@@ -62,6 +62,46 @@ router.post('/login', function(req, res) {
   });
 });
 
+router.post('/fblogin', function(req, res) {
+  User.findOne({
+    email: req.body.email,
+    facebookId: req.body.userID
+  }, function(err, user) {
+    if (err) throw err;
+
+    if (!user) {
+      var newUser = new User({
+        email:    req.body.email,
+        password: req.body.userID,
+        facebookId: req.body.userID,
+        firstname: req.body.firstname,
+        lastname: req.body.lastname,
+        picture: req.body.picture
+      });
+      // save the user
+      newUser.save(function(err, newUser) {
+        if (err) {
+          console.log(err);
+          return res.status(400).json({success: false, msg: 'Email already exists.', errorEmail: true});
+        }
+        console.log(newUser)
+        const token = jwt.sign({id: newUser._id}, config.secret, {
+          expiresIn: 86400 // 1 week
+        });
+            // return the information including token as JSON
+        //res.json({success: true, token: 'JWT ' + token, user: user});
+        res.status(201).json({success: true, msg: 'Successful created new user.', token: 'JWT ' + token, user: newUser});
+      });
+    } else {
+      const token = jwt.sign({id: user._id}, config.secret, {
+        expiresIn: 86400 // 1 week
+      });
+          // return the information including token as JSON
+      res.json({success: true, token: 'JWT ' + token, user: user});
+    }
+  });
+});
+
 router.put('/user/account', function(req, res) {
   User.findOne({
     _id: req.body.id,

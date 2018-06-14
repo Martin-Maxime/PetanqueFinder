@@ -12,6 +12,10 @@ var UserSchema = new Schema({
         type: String,
         required: true
     },
+  facebookId: {
+        type: String,
+        required: false
+  },
   firstname: {
         type: String,
         required: true
@@ -20,25 +24,25 @@ var UserSchema = new Schema({
         type: String,
         required: true
     },
-  password: {
-        type: String,
-        required: true
-    },
   birthday: {
         type: String,
-        required: true
+        required: false
     },
   address: {
         type: String,
-        required: true
+        required: false
     },
   postcode: {
         type: Number,
-        required: true
+        required: false
     },
   city: {
         type: String,
-        required: true
+        required: false
+    },
+  picture: {
+        type: String,
+        required: false
     },
   created_on: {
     type: Date,
