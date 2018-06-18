@@ -2,6 +2,8 @@ var express = require('express');
 var router = express.Router();
 
 var config = require('../config/database'),
+    configAccess = require('../config'),
+    allowOnly = require('../services/routesHelpers').allowOnly,
     passport = require('passport'),
     AuthController = require('../controllers/authController'),
     UserController = require('../controllers/userController');
@@ -12,6 +14,7 @@ var APIRoutes = function(passport) {
   router.post('/login', AuthController.login);
   router.post('/fblogin', AuthController.fbLogin);
   router.put('/user/account', UserController.updateAccount);
+  //router.put('/user/account',passport.authenticate('jwt', { session: false }), allowOnly(config.accessLevels.user,  UserController.updateAccount));
 
   return router;
 };
