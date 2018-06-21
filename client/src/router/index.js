@@ -3,7 +3,7 @@ import VueHead from 'vue-head'
 import Router from 'vue-router'
 import VueRouter from 'vue-router'
 import HelloWorld from '@/components/HelloWorld'
-import Users from '@/components/Users'
+import Users from '@/components/admin/Users'
 import Signup from '@/components/Signup'
 import Signin from '@/components/auth/login/signin'
 import Account from '@/components/user/Account'
@@ -21,7 +21,8 @@ const router = new VueRouter({
   {
     path: '/users',
     name: 'Users',
-    component: Users
+    component: Users,
+    meta: {requiresAuth: true}
   },
   {
     path: '/signup',

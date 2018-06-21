@@ -8,6 +8,7 @@ var User = require("../models/users");
 // The authentication controller.
 var UserController = {};
 
+// Update user's informations
 UserController.updateAccount = function(req, res) {
   User.findOne({
     _id: req.body.id,
@@ -59,6 +60,33 @@ UserController.updateAccount = function(req, res) {
         })
     }
   });
+};
+
+// Get list of users
+UserController.getUsers = function(req, res) {
+  User.find({}, function(err, users) {
+    if(err) {
+      return res.status(400).json({success: false, msg: 'Get list of users failed'});
+    } else {
+      res.json({success: true, users: users});
+    }
+  })
+};
+
+// Delete user
+UserController.deleteUser = function(req, res) {
+  console.log(req.params.id)
+  User.findByIdAndRemove({_id: req.params.id}, function(err, user) {
+    if(err) {
+      return res.status(500).send(err);
+    } else {
+      const response = {
+        message: 'User successfully deleted',
+        id: req.params.id
+      };
+      return res.status(200).send(response)
+    }
+  })
 };
 
 module.exports = UserController;

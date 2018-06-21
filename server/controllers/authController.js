@@ -65,13 +65,9 @@ AuthController.login = function(req, res) {
 
 
 AuthController.fbLogin = function(req, res) {
-	console.log('enter');
   User.findOne({
     email: req.body.email,
-    facebookId: req.body.userID
   }, function(err, user) {
-    if (err) throw err;
-
     if (!user) {
       var newUser = new User({
         email:    req.body.email,
@@ -95,7 +91,22 @@ AuthController.fbLogin = function(req, res) {
         //res.json({success: true, token: 'JWT ' + token, user: user});
         res.status(201).json({success: true, msg: 'Successful created new user.', token: 'JWT ' + token, user: newUser});
       });
+    } else if(!user.facebookId) {
+      User.updateOne({email: req.body.email}, {$set: {facebookId: req.body.userID}}, 
+      function(err, result) {
+        if (err) {
+          return res.status(400).json({success: false, msg: 'FacebookId update failed', accountUpdated: false});
+        } else {
+          res.json({success: true, msg: 'FacebookId is updated', accountUpdated: true});
+        }          
+      });
+      const token = jwt.sign({id: user._id}, config.secret, {
+        expiresIn: 86400 // 1 week
+      });
+          // return the information including token as JSON
+      res.json({success: true, token: 'JWT ' + token, user: user});
     } else {
+      console.log('user exist');
       const token = jwt.sign({id: user._id}, config.secret, {
         expiresIn: 86400 // 1 week
       });

@@ -14,6 +14,8 @@ var APIRoutes = function(passport) {
   router.post('/login', AuthController.login);
   router.post('/fblogin', AuthController.fbLogin);
   router.put('/user/account', UserController.updateAccount);
+  router.get('/users', UserController.getUsers);
+  router.delete('/users/:id', UserController.deleteUser);
   //router.put('/user/account',passport.authenticate('jwt', { session: false }), allowOnly(config.accessLevels.user,  UserController.updateAccount));
 
   return router;
