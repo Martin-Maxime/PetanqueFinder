@@ -1,5 +1,8 @@
 var config = module.exports;
 
+config.keys = {
+    secret: '/jVdfUX+u/Kn3qPY4+ahjwQgyV5UhkM5cdh1i2xhozE=' // Not anymore...
+};
 
 var userRoles = config.userRoles = {
     admin: 1,

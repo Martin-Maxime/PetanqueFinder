@@ -93,7 +93,7 @@ export default {
 			}).then(response => {
 				let token = response.data.token;
 				let user = response.data.user;
-				let userInfos = {'userid': user._id, 'address': user.address, 'birthday': user.birthday, 'city': user.city, 'email': user.email, 'firstname': user.firstname, 'lastname': user.lastname, 'postcode': user.postcode};
+				let userInfos = {'userid': user._id, 'address': user.address, 'birthday': user.birthday, 'city': user.city, 'email': user.email, 'firstname': user.firstname, 'lastname': user.lastname, 'postcode': user.postcode, 'userRole': user.userRole};
 				localStorage.setItem('user-token', token);
 				localStorage.setItem('user-infos', JSON.stringify(userInfos));	
 				this.isLogged = true;

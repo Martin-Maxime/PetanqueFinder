@@ -1,6 +1,8 @@
 exports.allowOnly = function(accessLevel, callback) {
     function checkUserRole(req, res) {
-        if(!(accessLevel && req.user.role)) {
+        console.log(accessLevel, req.user.userRole)
+        if(!(accessLevel && req.user.userRole === accessLevel)) {
+        	console.log('enter '+ req.user.userRole)
             res.sendStatus(403);
             return;
         }

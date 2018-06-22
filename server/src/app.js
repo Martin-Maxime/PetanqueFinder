@@ -11,13 +11,14 @@ var config = require('../config/database');
 
 mongoose.connect(config.database);
 
+var hookJWTStrategy = require('../services/passportStrategy');
 var api = require('../routes/api');
 
 var app = express();
 
 app.use(function(req, res, next) {
   res.header("Access-Control-Allow-Origin", "*");
-  res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+  res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept, Authorization");
   res.header('Access-Control-Allow-Methods', 'PUT, POST, GET, DELETE, OPTIONS');
   next();
 });
@@ -35,6 +36,9 @@ app.use(passport.initialize());
 app.get('/', function(req, res) {
   res.send('Page under construction.');
 });
+
+// Hook the passport JWT strategy.
+hookJWTStrategy(passport);
 
 app.use('/api', api(passport));
 
