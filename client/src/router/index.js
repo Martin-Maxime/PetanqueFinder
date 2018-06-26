@@ -2,7 +2,7 @@ import Vue from 'vue'
 import VueHead from 'vue-head'
 import Router from 'vue-router'
 import VueRouter from 'vue-router'
-import HelloWorld from '@/components/HelloWorld'
+import Home from '@/components/home/Home'
 import Users from '@/components/admin/Users'
 import Signup from '@/components/Signup'
 import Signin from '@/components/auth/login/signin'
@@ -15,8 +15,8 @@ const router = new VueRouter({
   mode: 'history',
   routes: [{
     path: '/',
-    name: 'HelloWorld',
-    component: HelloWorld,
+    name: 'Home',
+    component: Home
   },
   {
     path: '/users',
