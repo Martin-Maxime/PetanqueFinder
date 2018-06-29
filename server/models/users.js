@@ -52,7 +52,10 @@ var UserSchema = new Schema({
   created_on: {
     type: Date,
     default: Date.now
-  }
+  },
+  requests: [{
+    type: Schema.Types.ObjectId, ref: 'Request'
+  }]
 });
 
 UserSchema.pre('save', function (next) {

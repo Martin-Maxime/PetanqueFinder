@@ -6,10 +6,12 @@ config.keys = {
 
 var userRoles = config.userRoles = {
     admin: 1,
-    user: 2
+    user: 2,
+    allUser: 3
 };
 
 config.accessLevels = {
     user: userRoles.user,
-    admin: userRoles.admin
+    admin: userRoles.admin,
+    allUser: userRoles.allUser
 };

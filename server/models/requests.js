@@ -3,10 +3,6 @@ var Schema = mongoose.Schema;
 
 var RequestSchema = new Schema({
 
-  userId: {
-        type: String,
-        required: true
-    },
   datePlay: {
         type: Date,
         required: true
@@ -38,6 +34,9 @@ var RequestSchema = new Schema({
   created_on: {
     type: Date,
     default: Date.now
+  },
+  user: {
+    type: Schema.Types.ObjectId, ref: 'User'
   }
 });
 

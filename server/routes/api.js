@@ -17,8 +17,8 @@ var APIRoutes = function(passport) {
   router.put('/user/account', UserController.updateAccount);
   router.get('/users', passport.authenticate('jwt', { session: false }), allowOnly(configAccess.accessLevels.admin, UserController.getUsers));
   router.delete('/users/:id', passport.authenticate('jwt', { session: false }), allowOnly(configAccess.accessLevels.admin, UserController.deleteUser));
-  router.get('/request', RequestController.getRequests);
-  router.post('/request', RequestController.postRequest);
+  router.get('/requests',  RequestController.getRequests);
+  router.post('/requests', passport.authenticate('jwt', { session: false }), allowOnly(configAccess.accessLevels.user, RequestController.postRequest));
 
   return router;
 };

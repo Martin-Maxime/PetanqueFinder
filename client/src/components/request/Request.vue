@@ -17,7 +17,9 @@
         </thead>
         <tbody>
           <tr v-for="request in this.requests">
-
+            <td><img :src="request.user.picture" alt=""></td>
+            <td>{{ request.user.firstname }}</td>
+            <td>{{ request.address }}</td>
             <td>{{ request.city }}</td>
             <td>{{ request.postcode }}</td>
             <td>{{ request.nbPlayer }}</td>

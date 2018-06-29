@@ -55,7 +55,7 @@ export default {
   methods: {
     async getUsers () {
       const response = await UsersService.listUsers()
-      
+      this.users = response.data.users
     },
     async deleteUser(userid) {
       await UsersService.deleteUser(userid)

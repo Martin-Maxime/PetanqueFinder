@@ -1,8 +1,9 @@
+var configAccess = require('../config');
+
 exports.allowOnly = function(accessLevel, callback) {
     function checkUserRole(req, res) {
-        console.log(accessLevel, req.user.userRole)
-        if(!(accessLevel && req.user.userRole === accessLevel)) {
-        	console.log('enter '+ req.user.userRole)
+        //console.log(accessLevel, req.user.userRole, configAccess.accessLevels.admin)
+        if(!(accessLevel && (req.user.userRole === accessLevel || req.user.userRole == configAccess.accessLevels.admin))) {
             res.sendStatus(403);
             return;
         }
