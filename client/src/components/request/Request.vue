@@ -16,8 +16,10 @@
           </tr>
         </thead>
         <tbody>
-          <tr v-for="request in this.requests">
-            <td><img :src="request.user.picture" alt=""></td>
+          <tr v-for="request in this.requests" v-bind:key="request.id">
+            <td>
+              <img :src="request.user.picture" alt>
+            </td>
             <td>{{ request.user.firstname }}</td>
             <td>{{ request.address }}</td>
             <td>{{ request.city }}</td>
@@ -29,32 +31,28 @@
         </tbody>
       </table>
     </div>
-    <div v-else>
-      Personne ne recherche de joueurs.
-    </div>
+    <div v-else>Personne ne recherche de joueurs.</div>
   </div>
 </template>
 
 <script>
-
-import RequestsService from '@/services/RequestsService'
+import RequestsService from "@/services/RequestsService";
 export default {
-  name: 'RequestComponent',
-  data () {
+  name: "RequestComponent",
+  data() {
     return {
       requests: []
-    }
+    };
   },
   methods: {
-    async getRequests () {
-      const response = await RequestsService.listRequests()
-      console.log(response)
-      this.requests = response.data.requests
-
-    },
+    async getRequests() {
+      const response = await RequestsService.listRequests();
+      console.log(response);
+      this.requests = response.data.requests;
+    }
   },
-  mounted () {
-    this.getRequests()
+  mounted() {
+    this.getRequests();
   }
-}
+};
 </script>

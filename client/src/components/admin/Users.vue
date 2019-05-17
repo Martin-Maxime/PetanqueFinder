@@ -17,8 +17,10 @@
           </tr>
         </thead>
         <tbody>
-          <tr v-for="user in this.users">
-            <td><img :src="user.picture" alt=""></td>
+          <tr v-for="user in this.users" v-bind:key="user.id">
+            <td>
+              <img :src="user.picture" alt>
+            </td>
             <td>{{ user.firstname }}</td>
             <td>{{ user.lastname }}</td>
             <td>{{ user.email}}</td>
@@ -37,41 +39,43 @@
       </table>
     </div>
     <div v-else>
-      Il n'y à pas d'utilisateurs<br /><br />
+      Il n'y à pas d'utilisateurs
+      <br>
+      <br>
     </div>
   </div>
 </template>
 
 <script>
-
-import UsersService from '@/services/UsersService'
+import UsersService from "@/services/UsersService";
 export default {
-  name: 'users',
-  data () {
+  name: "users",
+  data() {
     return {
       users: []
-    }
+    };
   },
   methods: {
-    async getUsers () {
-      const response = await UsersService.listUsers()
-      this.users = response.data.users
+    async getUsers() {
+      const response = await UsersService.listUsers();
+      this.users = response.data.users;
     },
     async deleteUser(userid) {
       await UsersService.deleteUser(userid)
-      .then(response => {
-        for(var index in this.users) {
-          if(this.users[index]._id === response.data.id) {
-            this.users.splice(index, 1);
+        .then(response => {
+          for (var index in this.users) {
+            if (this.users[index]._id === response.data.id) {
+              this.users.splice(index, 1);
+            }
           }
-        }
-      }).catch(error => {
-        console.log('error supr user');
-      })
+        })
+        .catch(error => {
+          console.log("error supr user");
+        });
     }
   },
-  mounted () {
-    this.getUsers()
+  mounted() {
+    this.getUsers();
   }
-}
+};
 </script>
