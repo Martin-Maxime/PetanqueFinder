@@ -1,35 +1,44 @@
 <template>
   <div id="app">
-      <div class="left-side">
-        Rechercher une partie autour de moi
-        <button class="geoloc" v-on:click="geoLocate"></button>
-      </div>
-      <input id="autocomplete"
-             placeholder="Enter your address"
-             onFocus=""
-             type="text"/>
+    <div class="left-side">
+      Rechercher une partie autour de moi
+      <button class="geoloc" v-on:click="geoLocate"></button>
+    </div>
+    <input id="autocomplete" placeholder="Enter your address" onFocus type="text">
 
-             <table id="address">
-              <tr>
-                <td class="label">Street address</td>
-                <td class="slimField"><input class="field" id="street_number" disabled="true"/></td>
-                <td class="wideField" colspan="2"><input class="field" id="route" disabled="true"/></td>
-              </tr>
-              <tr>
-                <td class="label">City</td>
-                <td class="wideField" colspan="3"><input class="field" id="locality" disabled="true"/></td>
-              </tr>
-              <tr>
-                <td class="label">State</td>
-                <td class="slimField"><input class="field" id="administrative_area_level_1" disabled="true"/></td>
-                <td class="label">Zip code</td>
-                <td class="wideField"><input class="field" id="postal_code" disabled="true"/></td>
-              </tr>
-              <tr>
-                <td class="label">Country</td>
-                <td class="wideField" colspan="3"><input class="field" id="country" disabled="true"/></td>
-              </tr>
-            </table>
+    <table id="address">
+      <tr>
+        <td class="label">Street address</td>
+        <td class="slimField">
+          <input class="field" id="street_number" disabled="true">
+        </td>
+        <td class="wideField" colspan="2">
+          <input class="field" id="route" disabled="true">
+        </td>
+      </tr>
+      <tr>
+        <td class="label">City</td>
+        <td class="wideField" colspan="3">
+          <input class="field" id="locality" disabled="true">
+        </td>
+      </tr>
+      <tr>
+        <td class="label">State</td>
+        <td class="slimField">
+          <input class="field" id="administrative_area_level_1" disabled="true">
+        </td>
+        <td class="label">Zip code</td>
+        <td class="wideField">
+          <input class="field" id="postal_code" disabled="true">
+        </td>
+      </tr>
+      <tr>
+        <td class="label">Country</td>
+        <td class="wideField" colspan="3">
+          <input class="field" id="country" disabled="true">
+        </td>
+      </tr>
+    </table>
   </div>
 </template>
 
@@ -52,6 +61,7 @@ export default {
           autocomplete.setBounds(circle.getBounds());
         });
       }
+      console.log(geolocation);
     }
   },
 
