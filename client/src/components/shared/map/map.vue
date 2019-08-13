@@ -18,7 +18,17 @@ export default {
       markerCoordinates: {
         latitude: 48.864716,
         longitude: 2.349014
-      }
+      },
+      markerUrl: "../../../assets/imgs/petanque-icon.svg",
+      gamesMarker: [
+        {
+          position: {
+            latitude: 48.764716,
+            longitude: 2.449014
+          },
+          icon: this.markerUrl
+        }
+      ]
     };
   },
 
@@ -43,6 +53,16 @@ export default {
           map
         });
       }
+      this.gamesMarker.forEach(game => {
+        console.log(game);
+        new google.maps.Marker({
+          position: new google.maps.LatLng(
+            game.position.latitude,
+            game.position.longitude
+          )
+          //icon: game.icon
+        }).setMap(map);
+      });
     }
   },
 
