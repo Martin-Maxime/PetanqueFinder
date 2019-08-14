@@ -25,8 +25,8 @@ export default {
           position: {
             latitude: 48.764716,
             longitude: 2.449014
-          },
-          icon: this.markerUrl
+          }
+          // icon: this.markerUrl
         }
       ]
     };
@@ -54,13 +54,16 @@ export default {
         });
       }
       this.gamesMarker.forEach(game => {
-        console.log(game);
         new google.maps.Marker({
+          map: map,
           position: new google.maps.LatLng(
             game.position.latitude,
             game.position.longitude
-          )
-          //icon: game.icon
+          ),
+          icon: {
+            url: "https://image.flaticon.com/icons/svg/188/188993.svg",
+            scaledSize: new google.maps.Size(25, 25)
+          }
         }).setMap(map);
       });
     }

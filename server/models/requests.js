@@ -2,42 +2,50 @@ var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 
 var RequestSchema = new Schema({
-
-  datePlay: {
+    datePlay: {
         type: Date,
         required: true
-  },
-  timePlay: {
+    },
+    timePlay: {
         type: String,
         required: true
-  },
-  nbPlayer: {
+    },
+    nbPlayer: {
         type: Number,
         required: true
-  },
-  lvlPlayer: {
+    },
+    lvlPlayer: {
         type: String,
         required: true
-  },
-  address: {
-        type: String,
-        required: true
-  },
-  postcode: {
-        type: Number,
-        required: false
     },
-  city: {
-        type: String,
-        required: false
+    address: {
+        street: {
+            type: String,
+            required: true
+        },
+        zip: {
+            type: String,
+            required: true
+        },
+        city: {
+            type: String,
+            required: true
+        },
+        location: {
+            type: { type: String },
+            coordinates: []
+        }
     },
-  created_on: {
-    type: Date,
-    default: Date.now
-  },
-  user: {
-    type: Schema.Types.ObjectId, ref: 'User'
-  }
+    created_on: {
+        type: Date,
+        default: Date.now
+    },
+    user: {
+        type: Schema.Types.ObjectId,
+        ref: 'User'
+    }
 });
+
+RequestSchema.index({ location: '2dsphere' });
 
 module.exports = mongoose.model('Request', RequestSchema);
