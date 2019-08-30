@@ -5,25 +5,19 @@
       <table class="table">
         <thead>
           <tr>
-            <th scope="col">Image</th>
-            <th scope="col">Prénom</th>
             <th scope="col">Adresse</th>
             <th scope="col">Ville</th>
             <th scope="col">Code postal</th>
-            <th scope="col">Nombre de joueur recherché</th>
-            <th scope="col">Niveau</th>
+            <th scope="col">Nombre joueurs</th>
+            <th scope="col">Niveau joueurs</th>
             <th scope="col">Posté le</th>
           </tr>
         </thead>
         <tbody>
           <tr v-for="request in this.requests" v-bind:key="request.id">
-            <td>
-              <img :src="request.user.picture" alt>
-            </td>
-            <td>{{ request.user.firstname }}</td>
-            <td>{{ request.address }}</td>
-            <td>{{ request.city }}</td>
-            <td>{{ request.postcode }}</td>
+            <td>{{ request.address.street }}</td>
+            <td>{{ request.address.city }}</td>
+            <td>{{ request.address.zip }}</td>
             <td>{{ request.nbPlayer }}</td>
             <td>{{ request.lvlPlayer }}</td>
             <td>{{ request.created_on }}</td>
@@ -47,12 +41,13 @@ export default {
   methods: {
     async getRequests() {
       const response = await RequestsService.listRequests();
-      console.log(response);
       this.requests = response.data.requests;
+      this.$store.commit("SET_REQUEST", this.requests);
     }
   },
   mounted() {
     this.getRequests();
+    console.log(this.$store.getters.REQUESTS);
   }
 };
 </script>

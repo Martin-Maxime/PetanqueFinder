@@ -33,7 +33,7 @@ var RequestSchema = new Schema({
         },
         location: {
             type: { type: String },
-            coordinates: []
+            coordinates: [Number]
         }
     },
     created_on: {

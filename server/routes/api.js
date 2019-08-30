@@ -7,33 +7,40 @@ var config = require('../config/database'),
     passport = require('passport'),
     AuthController = require('../controllers/authController'),
     UserController = require('../controllers/userController');
-    RequestController = require('../controllers/RequestController');
+RequestController = require('../controllers/RequestController');
 
 var APIRoutes = function(passport) {
+    router.post('/signup', AuthController.signup);
+    router.post('/login', AuthController.login);
+    router.post('/fblogin', AuthController.fbLogin);
+    router.put('/user/account', UserController.updateAccount);
+    router.get('/users', passport.authenticate('jwt', { session: false }), allowOnly(configAccess.accessLevels.admin, UserController.getUsers));
+    router.delete(
+        '/users/:id',
+        passport.authenticate('jwt', { session: false }),
+        allowOnly(configAccess.accessLevels.admin, UserController.deleteUser)
+    );
+    router.get('/requests', RequestController.getRequests);
+    router.post(
+        '/requests',
+        passport.authenticate('jwt', { session: false }),
+        allowOnly(configAccess.accessLevels.user, RequestController.postRequest)
+    );
 
-  router.post('/signup', AuthController.signup);
-  router.post('/login', AuthController.login);
-  router.post('/fblogin', AuthController.fbLogin);
-  router.put('/user/account', UserController.updateAccount);
-  router.get('/users', passport.authenticate('jwt', { session: false }), allowOnly(configAccess.accessLevels.admin, UserController.getUsers));
-  router.delete('/users/:id', passport.authenticate('jwt', { session: false }), allowOnly(configAccess.accessLevels.admin, UserController.deleteUser));
-  router.get('/requests',  RequestController.getRequests);
-  router.post('/requests', passport.authenticate('jwt', { session: false }), allowOnly(configAccess.accessLevels.user, RequestController.postRequest));
-
-  return router;
+    return router;
 };
 
-getToken = function (headers) {
-  if (headers && headers.authorization) {
-    var parted = headers.authorization.split(' ');
-    if (parted.length === 2) {
-      return parted[1];
+getToken = function(headers) {
+    if (headers && headers.authorization) {
+        var parted = headers.authorization.split(' ');
+        if (parted.length === 2) {
+            return parted[1];
+        } else {
+            return null;
+        }
     } else {
-      return null;
+        return null;
     }
-  } else {
-    return null;
-  }
 };
 
 module.exports = APIRoutes;

@@ -8,6 +8,8 @@ import App from './App';
 // Import App sass
 import './assets/style/app.scss';
 import router from './router';
+// import store vuex
+import store from './store';
 
 export const serverBus = new Vue();
 
@@ -18,5 +20,6 @@ new Vue({
   el: '#app',
   router,
   components: { App },
+  store,
   template: '<App/>'
 });
